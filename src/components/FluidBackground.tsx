@@ -174,27 +174,35 @@ export function FluidBackground({ children, className }: FluidBackgroundProps) {
 
     const render = () => {
       uniforms.u_time.value = clock.getElapsedTime();
-      
-      // Smoothly interpolate mouse position for a fluid feel
       uniforms.u_mouse.value.lerp(targetMouse, 0.09);
-
       renderer.render(scene, camera);
       animationFrameId = requestAnimationFrame(render);
     };
     render();
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+      } else {
+        render();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     // Cleanup
     return () => {
       window.removeEventListener('resize', onWindowResize);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       cancelAnimationFrame(animationFrameId);
-      
+
       if (mountRef.current) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         mountRef.current.removeChild(renderer.domElement);
       }
-      
+
+      scene.clear();
       geometry.dispose();
       material.dispose();
       renderer.dispose();

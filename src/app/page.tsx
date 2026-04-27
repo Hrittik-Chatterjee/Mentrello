@@ -1,5 +1,10 @@
-import FluidBackground from '@/components/FluidBackground';
+import dynamic from 'next/dynamic';
 import HeroContent from '@/components/HeroContent';
+
+const FluidBackground = dynamic(() => import('@/components/FluidBackground'), {
+  ssr: false,
+  loading: () => <div className="w-full h-screen bg-black" />,
+});
 
 export default function Home() {
   return (
