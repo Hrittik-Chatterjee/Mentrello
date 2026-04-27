@@ -1,15 +1,10 @@
-import dynamic from 'next/dynamic';
+import FluidBackgroundClient from '@/components/FluidBackgroundClient';
 import HeroContent from '@/components/HeroContent';
-
-const FluidBackground = dynamic(() => import('@/components/FluidBackground'), {
-  ssr: false,
-  loading: () => <div className="w-full h-screen bg-black" />,
-});
 
 export default function Home() {
   return (
     <main className="w-full h-screen font-sans overflow-hidden">
-      <FluidBackground>
+      <FluidBackgroundClient>
         <div
           className="flex flex-col items-center justify-center w-full h-full px-4 relative"
           style={{
@@ -19,7 +14,7 @@ export default function Home() {
         >
           <HeroContent />
         </div>
-      </FluidBackground>
+      </FluidBackgroundClient>
     </main>
   );
 }
